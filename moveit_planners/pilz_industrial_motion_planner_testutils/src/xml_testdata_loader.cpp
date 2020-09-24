@@ -274,7 +274,16 @@ CartesianConfiguration XmlTestdataLoader::getPose(const std::string& pos_name, c
   if (seeds_tree != empty_tree_)
   {
     cart_config.setSeed(getJoints(seeds_tree, group_name));
+    JointConfiguration jc = getJoints(seeds_tree, group_name);
+    ROS_ERROR_STREAM_NAMED("xml", "XML ~ getPose ~ seed:");
+    for (float x : jc.getJoints()){
+      ROS_ERROR_STREAM_NAMED("xml", "* " << x);
+    }
+  } else
+  {
+    ROS_ERROR_STREAM_NAMED("xml", "XML ~ getPose ~ no seed");
   }
+  
   return cart_config;
 }
 
@@ -328,6 +337,7 @@ PtpCart XmlTestdataLoader::getPtpCart(const std::string& cmd_name) const
 
 LinJoint XmlTestdataLoader::getLinJoint(const std::string& cmd_name) const
 {
+  ROS_WARN("getLinJoint");
   CmdReader cmd_reader{ findCmd(cmd_name, LINS_PATH_STR, LIN_STR) };
   std::string planning_group{ cmd_reader.getPlanningGroup() };
 
@@ -335,6 +345,22 @@ LinJoint XmlTestdataLoader::getLinJoint(const std::string& cmd_name) const
   cmd.setPlanningGroup(planning_group);
   cmd.setVelocityScale(cmd_reader.getVelocityScale());
   cmd.setAccelerationScale(cmd_reader.getAccelerationScale());
+
+  std::vector<double> start = getJoints(cmd_reader.getStartPoseName(), planning_group).getJoints();
+  std::vector<double> goal = getJoints(cmd_reader.getEndPoseName(), planning_group).getJoints();
+
+  std::stringstream so;
+  so << "XmlTestdataLoader::getLinJointCart start: ";
+  for (auto x : start) {
+    so << x << " ";
+  }
+  ROS_WARN_STREAM(so.str());
+  so = std::stringstream();
+  so << "XmlTestdataLoader::getLinJointCart goal: ";
+  for (auto x : goal) {
+    so << x << " ";
+  }
+  ROS_WARN_STREAM(so.str());
 
   cmd.setStartConfiguration(getJoints(cmd_reader.getStartPoseName(), planning_group));
   cmd.setGoalConfiguration(getJoints(cmd_reader.getEndPoseName(), planning_group));

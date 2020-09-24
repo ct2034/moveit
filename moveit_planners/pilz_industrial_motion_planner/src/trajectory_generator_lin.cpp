@@ -76,6 +76,7 @@ void TrajectoryGeneratorLIN::extractMotionPlanInfo(const planning_interface::Mot
   // goal given in joint space
   if (!req.goal_constraints.front().joint_constraints.empty())
   {
+    ROS_WARN("goal given in joint space");
     info.link_name = robot_model_->getJointModelGroup(req.group_name)->getSolverInstance()->getTipFrame();
 
     if (req.goal_constraints.front().joint_constraints.size() !=
@@ -91,14 +92,18 @@ void TrajectoryGeneratorLIN::extractMotionPlanInfo(const planning_interface::Mot
     for (const auto& joint_item : req.goal_constraints.front().joint_constraints)
     {
       info.goal_joint_position[joint_item.joint_name] = joint_item.position;
+      ROS_WARN_STREAM("joint_item.position: " << joint_item.position);
     }
 
+    ROS_WARN("pre  computeLinkFK");
     // Ignored return value because at this point the function should always return 'true'.
     computeLinkFK(robot_model_, info.link_name, info.goal_joint_position, info.goal_pose);
+    ROS_WARN("post computeLinkFK");
   }
   // goal given in Cartesian space
   else
   {
+    ROS_WARN("goal given in Cartesian space");
     info.link_name = req.goal_constraints.front().position_constraints.front().link_name;
     if (req.goal_constraints.front().position_constraints.front().header.frame_id.empty() ||
         req.goal_constraints.front().orientation_constraints.front().header.frame_id.empty())
@@ -139,7 +144,7 @@ void TrajectoryGeneratorLIN::extractMotionPlanInfo(const planning_interface::Mot
 
   // check goal pose ik before Cartesian motion plan starts
   std::map<std::string, double> ik_solution;
-  if (!computePoseIK(robot_model_, info.group_name, info.link_name, info.goal_pose, frame_id, info.start_joint_position,
+  if (!computePoseIK(robot_model_, info.group_name, info.link_name, info.goal_pose, frame_id, info.goal_joint_position,
                      ik_solution))
   {
     std::ostringstream os;

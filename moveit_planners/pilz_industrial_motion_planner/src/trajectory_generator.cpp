@@ -277,6 +277,7 @@ bool TrajectoryGenerator::generate(const planning_interface::MotionPlanRequest& 
 
   try
   {
+    ROS_WARN("validateRequest");
     validateRequest(req);
   }
   catch (const MoveItErrorCodeException& ex)
@@ -289,6 +290,7 @@ bool TrajectoryGenerator::generate(const planning_interface::MotionPlanRequest& 
 
   try
   {
+    ROS_WARN("cmdSpecificRequestValidation");
     cmdSpecificRequestValidation(req);
   }
   catch (const MoveItErrorCodeException& ex)
@@ -302,6 +304,7 @@ bool TrajectoryGenerator::generate(const planning_interface::MotionPlanRequest& 
   MotionPlanInfo plan_info;
   try
   {
+    ROS_WARN("extractMotionPlanInfo");
     extractMotionPlanInfo(req, plan_info);
   }
   catch (const MoveItErrorCodeException& ex)
@@ -315,6 +318,7 @@ bool TrajectoryGenerator::generate(const planning_interface::MotionPlanRequest& 
   trajectory_msgs::JointTrajectory joint_trajectory;
   try
   {
+    ROS_WARN("plan");
     plan(req, plan_info, sampling_time, joint_trajectory);
   }
   catch (const MoveItErrorCodeException& ex)

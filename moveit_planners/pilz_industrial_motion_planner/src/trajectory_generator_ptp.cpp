@@ -57,28 +57,20 @@ TrajectoryGeneratorPTP::TrajectoryGeneratorPTP(const robot_model::RobotModelCons
 
   joint_limits_ = planner_limits_.getJointLimitContainer();
 
+  for (auto it = joint_limits_.begin(); it != joint_limits_.end(); it++ )
+  {
+    ROS_ERROR_STREAM("joint_limits_: " << it->first << " ~ " << it->second.max_deceleration << " ~ " << it->second.has_deceleration_limits);
+  }
+
   // collect most strict joint limits for each group in robot model
   for (const auto& jmg : robot_model->getJointModelGroups())
   {
     pilz_extensions::JointLimit most_strict_limit = joint_limits_.getCommonLimit(jmg->getActiveJointModelNames());
 
-    if (!most_strict_limit.has_velocity_limits)
+    if (most_strict_limit.has_velocity_limits & most_strict_limit.has_acceleration_limits & most_strict_limit.has_deceleration_limits)
     {
-      ROS_ERROR_STREAM("velocity limit not set for group " << jmg->getName());
-      throw TrajectoryGeneratorInvalidLimitsException("velocity limit not set for group " + jmg->getName());
+      most_strict_limits_.insert(std::pair<std::string, pilz_extensions::JointLimit>(jmg->getName(), most_strict_limit));
     }
-    if (!most_strict_limit.has_acceleration_limits)
-    {
-      ROS_ERROR_STREAM("acceleration limit not set for group " << jmg->getName());
-      throw TrajectoryGeneratorInvalidLimitsException("acceleration limit not set for group " + jmg->getName());
-    }
-    if (!most_strict_limit.has_deceleration_limits)
-    {
-      ROS_ERROR_STREAM("deceleration limit not set for group " << jmg->getName());
-      throw TrajectoryGeneratorInvalidLimitsException("deceleration limit not set for group " + jmg->getName());
-    }
-
-    most_strict_limits_.insert(std::pair<std::string, pilz_extensions::JointLimit>(jmg->getName(), most_strict_limit));
   }
 
   ROS_INFO("Initialized Point-to-Point Trajectory Generator.");
@@ -129,6 +121,11 @@ void TrajectoryGeneratorPTP::planPTP(const std::map<std::string, double>& start_
   double max_duration = -1.0;
 
   std::map<std::string, VelocityProfileATrap> velocity_profile;
+
+  if(most_strict_limits_.end() == most_strict_limits_.find(group_name)){
+    throw TrajectoryGeneratorInvalidLimitsException("velocity limit not set for group " + group_name);
+  }
+
   for (const auto& joint_name : joint_trajectory.joint_names)
   {
     // create vecocity profile if necessary
@@ -183,6 +180,7 @@ void TrajectoryGeneratorPTP::planPTP(const std::map<std::string, double>& start_
   // add last time
   time_samples.push_back(max_duration);
 
+  ROS_WARN_STREAM("planPTP");
   // construct joint trajectory point
   for (double time_stamp : time_samples)
   {
@@ -190,6 +188,7 @@ void TrajectoryGeneratorPTP::planPTP(const std::map<std::string, double>& start_
     point.time_from_start = ros::Duration(time_stamp);
     for (std::string& joint_name : joint_trajectory.joint_names)
     {
+      ROS_WARN_STREAM("t: " << time_stamp << " j: " << joint_name << " pos: " << velocity_profile.at(joint_name).Pos(time_stamp));
       point.positions.push_back(velocity_profile.at(joint_name).Pos(time_stamp));
       point.velocities.push_back(velocity_profile.at(joint_name).Vel(time_stamp));
       point.accelerations.push_back(velocity_profile.at(joint_name).Acc(time_stamp));

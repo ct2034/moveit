@@ -111,6 +111,7 @@ inline const GoalType& BaseCmd<StartType, GoalType>::getGoalConfiguration() cons
 template <class StartType, class GoalType>
 planning_interface::MotionPlanRequest BaseCmd<StartType, GoalType>::toRequest() const
 {
+  ROS_WARN("toRequest");
   planning_interface::MotionPlanRequest req;
   req.planner_id = getPlannerId();
   req.group_name = this->planning_group_;

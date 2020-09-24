@@ -41,30 +41,30 @@ POSSIBILITY OF SUCH DAMAGE.
     </pos>
 
     <pos name="P1">
-      <joints group_name="panda_arm">-0.022096 -0.753529 0.007612 -1.716165 0.0063464 0.962660 0.771123</joints>
-      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0 0.8 0.924138 -0.382057 0.0 0.0
-        <seed><joints group_name="panda_arm">-0.022096 -0.753529 0.007612 -1.716165 0.0063464 0.962660 0.771123</joints></seed>
+      <joints group_name="panda_arm">0.245966 -0.7603 -0.0839354 -1.71467 -0.0707192 0.957314 0.144317</joints>
+      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0.0 0.8 1.0 0.0 0.0 0.0
+        <seed><joints group_name="panda_arm">0.245966 -0.7603 -0.0839354 3.66768e-12 -0.0707192 0.957314 0.144317</joints></seed>
       </xyzQuat>
     </pos>
 
     <pos name="P2">
-      <joints group_name="panda_arm">-0.061035 -0.301221 0.410282 -1.665777 0.120602 1.389535 1.138547</joints>
-      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.4 0.2 0.7 0.924138 -0.382057 0.0 0.0
-        <seed><joints group_name="panda_arm">-0.061035 -0.301221 0.410282 -1.665777 0.120602 1.389535 1.138547</joints></seed>
+      <joints group_name="panda_arm">0.0570166 -0.288272 0.320395 -1.66662 0.0910966 1.393 1.16618</joints>
+      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.4 0.2 0.7 1.0 0.0 0.0 0.0
+        <seed><joints group_name="panda_arm">0.0570166 -0.288272 0.320395 -1.66662 0.0910966 1.393 1.16618</joints></seed>
       </xyzQuat>
     </pos>
 
     <pos name="P3">
-      <joints group_name="panda_arm">0.0875228 -0.540765 0.770139 -1.990062 0.366596 1.582282 1.560837</joints>
-      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0.4 0.6 0.924138 -0.382057 0.0 0.0
-        <seed><joints group_name="panda_arm">0.0875228 -0.540765 0.770139 -1.990062 0.366596 1.582282 1.560837</joints></seed>
+      <joints group_name="panda_arm">-0.0337207 -0.607035 0.83575 -1.9832 0.437023 1.54953 1.49871</joints>
+      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0.4 0.6 1.0 0.0 0.0 0.0
+        <seed><joints group_name="panda_arm">-0.0337207 -0.607035 0.83575 -1.9832 0.437023 1.54953 1.49871</joints></seed>
       </xyzQuat>
     </pos>
 
     <pos name="P4">
-      <joints group_name="panda_arm">0.164988 -0.805223 0.304894 -2.020563 0.230321 1.247100 1.238191</joints>
-      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0.2 0.7 0.924138 -0.382057 0.0 0.0
-        <seed><joints group_name="panda_arm">0.164988 -0.805223 0.304894 -2.020563 0.230321 1.247100 1.238191</joints></seed>
+      <joints group_name="panda_arm">0.0602826 -0.830253 0.348821 -2.01642 0.271065 1.22908 1.17877</joints>
+      <xyzQuat group_name="panda_arm" link_name="panda_link8">0.2 0.2 0.7 1.0 0.0 0.0 0.0
+        <seed><joints group_name="panda_arm">0.0602826 -0.830253 0.348821 -2.01642 0.271065 1.22908 1.17877</joints></seed>
       </xyzQuat>
     </pos>
 

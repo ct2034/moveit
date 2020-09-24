@@ -12,7 +12,7 @@
 
   <!-- Load additional joint limits for compability with the PTP planner -->
   <group ns="robot_description_planning">
-    <rosparam command="load" file="$(find pilz_industrial_motion_planner)/test/test_robots/frankaemika_panda/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find moveit_resources_panda_moveit_config)/config/joint_limits.yaml"/>
   </group>
 
   <!-- GDB Debug Option -->
@@ -64,6 +64,7 @@
     <param name="planning_scene_monitor/publish_state_updates" value="$(arg publish_monitored_planning_scene)" />
     <param name="planning_scene_monitor/publish_transforms_updates" value="$(arg publish_monitored_planning_scene)" />
 
+    <remap from="/joint_states" to="/joint_states_desired" />
   </node>
 
 </launch>

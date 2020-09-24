@@ -40,36 +40,25 @@ POSSIBILITY OF SUCH DAMAGE.
   </node>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
- 
-  <!-- <arg name="debug" default="false"/> --> -->
-  <!-- <include file="$(find pilz_industrial_motion_planner)/test/test_robots/frankaemika_panda/launch/move_group.launch">
+
+  <arg name="debug" default="true"/>
+  <include file="$(find pilz_industrial_motion_planner)/test/test_robots/frankaemika_panda/launch/move_group.launch">
     <arg name="allow_trajectory_execution" value="true"/>
     <arg name="fake_execution" value="true"/>
     <arg name="info" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
-  </include> -->
-  <include file="$(find moveit_resources_panda_moveit_config)/launch/move_group.launch">
-    <arg name="fake_execution" value="true"/>
-    <arg name="pipeline" value="pilz_industrial_motion_planner" />
   </include>
-  <include file="$(find moveit_resources_panda_moveit_config)/launch/planning_context.launch">
-      <arg name="load_robot_description" value="true"/>
-  </include>
-  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_1" args="0 0 0 0 0 0 world panda_link0" />
 
-  <!-- Load cartesian limits -->
-  <group ns="robot_description_planning">
-    <rosparam command="load" file="$(find pilz_industrial_motion_planner)/test/test_robots/config/cartesian_limits.yaml"/>
-  </group>
+  <include file="$(find prbt_moveit_config)/launch/moveit_rviz.launch"/>
 
   <!-- run test -->
-  <test pkg="pilz_industrial_motion_planner" test-name="integrationtest_command_planning_frankaemika_panda" type="integrationtest_command_planning">
+  <!-- <test pkg="pilz_industrial_motion_planner" test-name="integrationtest_command_planning_frankaemika_panda" type="integrationtest_command_planning">
     <param name="testdata_file_name" value="$(find pilz_industrial_motion_planner)/test/test_robots/frankaemika_panda/test_data/testdata_sequence.xml" />
     <param name="planning_group" value="panda_arm" />
     <param name="target_link" value="panda_link8" />
     <param name="pose_norm_tolerance" value="1.0e-5" />
     <param name="orientation_norm_tolerance" value="1.0e-5" />
     <param name="joint_prefix" value="panda_joint" />
-  </test>
+  </test> -->
 
 </launch>

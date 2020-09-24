@@ -319,6 +319,13 @@ bool KDLKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose& ik_pose, c
                                            moveit_msgs::MoveItErrorCodes& error_code,
                                            const kinematics::KinematicsQueryOptions& options) const
 {
+  ROS_ERROR_NAMED("kdl?!", "searchPositionIK");
+  ROS_ERROR_NAMED("kdl?!", "ik_pose");
+  ROS_ERROR_STREAM_NAMED("kdl?!", "x: " << ik_pose.position.x << "y: " << ik_pose.position.y << "z: " << ik_pose.position.z);
+  ROS_ERROR_NAMED("kdl?!", "ik_seed_state");
+  auto a = "";
+  for(float x : ik_seed_state){ROS_ERROR_STREAM_NAMED("kdl?!", "* " << x);};
+  
   ros::WallTime start_time = ros::WallTime::now();
   if (!initialized_)
   {
@@ -369,7 +376,7 @@ bool KDLKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose& ik_pose, c
   KDL::Frame pose_desired;
   tf2::fromMsg(ik_pose, pose_desired);
 
-  ROS_DEBUG_STREAM_NAMED("kdl", "searchPositionIK: Position request pose is "
+  ROS_INFO_STREAM_NAMED("kdl", "searchPositionIK: Position request pose is "
                                     << ik_pose.position.x << " " << ik_pose.position.y << " " << ik_pose.position.z
                                     << " " << ik_pose.orientation.x << " " << ik_pose.orientation.y << " "
                                     << ik_pose.orientation.z << " " << ik_pose.orientation.w);
@@ -384,7 +391,7 @@ bool KDLKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose& ik_pose, c
         getRandomConfiguration(jnt_seed_state.data, consistency_limits_mimic, jnt_pos_in.data);
       else
         getRandomConfiguration(jnt_pos_in.data);
-      ROS_DEBUG_STREAM_NAMED("kdl", "New random configuration (" << attempt << "): " << jnt_pos_in);
+      ROS_INFO_STREAM_NAMED("kdl", "New random configuration (" << attempt << "): " << jnt_pos_in);
     }
 
     int ik_valid =
@@ -406,13 +413,17 @@ bool KDLKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose& ik_pose, c
 
       // solution passed consistency check and solution callback
       error_code.val = error_code.SUCCESS;
-      ROS_DEBUG_STREAM_NAMED("kdl", "Solved after " << (ros::WallTime::now() - start_time).toSec() << " < " << timeout
+      ROS_INFO_STREAM_NAMED("kdl", "Solved after " << (ros::WallTime::now() - start_time).toSec() << " < " << timeout
                                                     << "s and " << attempt << " attempts");
+      ROS_INFO_STREAM_NAMED("kdl", "solution: ");
+      for(auto x : solution){
+        ROS_INFO_STREAM_NAMED("kdl", " ~ " << x);
+      }
       return true;
     }
   } while (!timedOut(start_time, timeout));
 
-  ROS_DEBUG_STREAM_NAMED("kdl", "IK timed out after " << (ros::WallTime::now() - start_time).toSec() << " > " << timeout
+  ROS_INFO_STREAM_NAMED("kdl", "IK timed out after " << (ros::WallTime::now() - start_time).toSec() << " > " << timeout
                                                       << "s and " << attempt << " attempts");
   error_code.val = error_code.TIMED_OUT;
   return false;

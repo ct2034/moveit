@@ -47,6 +47,7 @@ bool pilz_industrial_motion_planner::computePoseIK(const moveit::core::RobotMode
                                                    std::map<std::string, double>& solution, bool check_self_collision,
                                                    const double timeout)
 {
+  ROS_WARN("computePoseIK");
   if (!robot_model->hasJointModelGroup(group_name))
   {
     ROS_ERROR_STREAM("Robot model has no planning group named as " << group_name);
@@ -127,6 +128,10 @@ bool pilz_industrial_motion_planner::computeLinkFK(const moveit::core::RobotMode
   // update the frame
   rstate.update();
   pose = rstate.getFrameTransform(link_name);
+
+  ROS_WARN_STREAM("computeLinkFK pose: " << pose.translation()[0] << " " 
+                                         << pose.translation()[1] << " " 
+                                         << pose.translation()[2]);
 
   return true;
 }
